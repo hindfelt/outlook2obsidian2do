@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+  xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides"
+  xsi:type="MailApp">
+
+  <Id>e932bc95-416c-4f8c-af8e-3bbcb2221709</Id>
+  <Version>1.0.5.0</Version>
+  <ProviderName>outlook2obsidian2do</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Obsidian To-Do"/>
+  <Description DefaultValue="Extract to-dos from this email with a Claude agent team and file them into the Obsidian vault."/>
+  <IconUrl DefaultValue="https://localhost:8000/addin/assets/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://localhost:8000/addin/assets/icon-128.png"/>
+  <SupportUrl DefaultValue="https://localhost:8000/addin/taskpane.html?v=6"/>
+
+  <AppDomains>
+    <AppDomain>https://localhost:8000</AppDomain>
+  </AppDomains>
+
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+
+  <Requirements>
+    <Sets>
+      <Set Name="Mailbox" MinVersion="1.3"/>
+    </Sets>
+  </Requirements>
+
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://localhost:8000/addin/taskpane.html?v=6"/>
+        <RequestedHeight>320</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+
+  <Permissions>ReadItem</Permissions>
+
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+  </Rule>
+
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <!-- Fallback block for clients that don't understand VersionOverrides v1.1:
+         same ribbon button, no pinning. The v1.1 block at the bottom requires
+         Mailbox 1.5, which is the floor for both SupportsPinning and the
+         ItemChanged event the pane uses to re-target. -->
+    <Requirements>
+      <bt:Sets DefaultMinVersion="1.3">
+        <bt:Set Name="Mailbox"/>
+      </bt:Sets>
+    </Requirements>
+
+    <Hosts>
+      <Host xsi:type="MailHost">
+        <DesktopFormFactor>
+          <FunctionFile resid="functionFile"/>
+
+          <ExtensionPoint xsi:type="MessageReadCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="obsidianGroup">
+                <Label resid="groupLabel"/>
+                <Control xsi:type="Button" id="obsidianTaskPaneButton">
+                  <Label resid="buttonLabel"/>
+                  <Supertip>
+                    <Title resid="buttonLabel"/>
+                    <Description resid="buttonTip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="icon16"/>
+                    <bt:Image size="32" resid="icon32"/>
+                    <bt:Image size="80" resid="icon80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="taskpaneUrl"/>
+                  </Action>
+                </Control>
+                <Control xsi:type="Button" id="obsidianRunButton">
+                  <Label resid="runLabel"/>
+                  <Supertip>
+                    <Title resid="runLabel"/>
+                    <Description resid="runTip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="icon16"/>
+                    <bt:Image size="32" resid="icon32"/>
+                    <bt:Image size="80" resid="icon80"/>
+                  </Icon>
+                  <Action xsi:type="ExecuteFunction">
+                    <FunctionName>extractTodos</FunctionName>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+
+    <Resources>
+      <bt:Images>
+        <bt:Image id="icon16" DefaultValue="https://localhost:8000/addin/assets/icon-16.png"/>
+        <bt:Image id="icon32" DefaultValue="https://localhost:8000/addin/assets/icon-32.png"/>
+        <bt:Image id="icon80" DefaultValue="https://localhost:8000/addin/assets/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="taskpaneUrl" DefaultValue="https://localhost:8000/addin/taskpane.html?v=6"/>
+        <bt:Url id="functionFile" DefaultValue="https://localhost:8000/addin/commands.html?v=6"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="groupLabel" DefaultValue="Obsidian"/>
+        <bt:String id="buttonLabel" DefaultValue="Open pane"/>
+        <bt:String id="runLabel" DefaultValue="Extract to-dos"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="buttonTip" DefaultValue="Open the Obsidian To-Do pane: extract from the selected email, watch the job queue, change settings. Pin it to keep it open while you move between emails."/>
+        <bt:String id="runTip" DefaultValue="Extract to-dos from this email and write them straight into the Obsidian vault. Progress appears above the message."/>
+      </bt:LongStrings>
+    </Resources>
+
+    <!-- SupportsPinning is only valid in VersionOverrides v1.1, so the whole
+         block is repeated here. Clients that understand v1.1 use this one and
+         get a pinnable pane; older clients fall back to the v1.0 block above
+         and get the same button without pinning. -->
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.5">
+          <bt:Set Name="Mailbox"/>
+        </bt:Sets>
+      </Requirements>
+
+      <Hosts>
+        <Host xsi:type="MailHost">
+          <DesktopFormFactor>
+            <FunctionFile resid="functionFile"/>
+
+            <ExtensionPoint xsi:type="MessageReadCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="obsidianGroup">
+                  <Label resid="groupLabel"/>
+                  <Control xsi:type="Button" id="obsidianTaskPaneButton">
+                    <Label resid="buttonLabel"/>
+                    <Supertip>
+                      <Title resid="buttonLabel"/>
+                      <Description resid="buttonTip"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="icon16"/>
+                      <bt:Image size="32" resid="icon32"/>
+                      <bt:Image size="80" resid="icon80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="taskpaneUrl"/>
+                      <!-- Adds the pin button to the pane header, so it stays
+                           open while you move between messages. -->
+                      <SupportsPinning>true</SupportsPinning>
+                      <!-- New Outlook for Mac does not show the pin for
+                           SupportsPinning alone (office-js #2635) but does
+                           when the pane also supports multi-select
+                           (office-js #5921). Multi-select itself is harmless:
+                           with several messages selected the pane just says
+                           "No message selected". Needs Mailbox 1.13. -->
+                      <SupportsMultiSelect>true</SupportsMultiSelect>
+                    </Action>
+                  </Control>
+                  <Control xsi:type="Button" id="obsidianRunButton">
+                    <Label resid="runLabel"/>
+                    <Supertip>
+                      <Title resid="runLabel"/>
+                      <Description resid="runTip"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="icon16"/>
+                      <bt:Image size="32" resid="icon32"/>
+                      <bt:Image size="80" resid="icon80"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>extractTodos</FunctionName>
+                    </Action>
+                  </Control>
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+          </DesktopFormFactor>
+        </Host>
+      </Hosts>
+
+      <Resources>
+        <bt:Images>
+          <bt:Image id="icon16" DefaultValue="https://localhost:8000/addin/assets/icon-16.png"/>
+          <bt:Image id="icon32" DefaultValue="https://localhost:8000/addin/assets/icon-32.png"/>
+          <bt:Image id="icon80" DefaultValue="https://localhost:8000/addin/assets/icon-80.png"/>
+        </bt:Images>
+        <bt:Urls>
+          <bt:Url id="taskpaneUrl" DefaultValue="https://localhost:8000/addin/taskpane.html?v=6"/>
+          <bt:Url id="functionFile" DefaultValue="https://localhost:8000/addin/commands.html?v=6"/>
+        </bt:Urls>
+        <bt:ShortStrings>
+          <bt:String id="groupLabel" DefaultValue="Obsidian"/>
+          <bt:String id="buttonLabel" DefaultValue="Open pane"/>
+        <bt:String id="runLabel" DefaultValue="Extract to-dos"/>
+        </bt:ShortStrings>
+        <bt:LongStrings>
+          <bt:String id="buttonTip" DefaultValue="Open the Obsidian To-Do pane: extract from the selected email, watch the job queue, change settings. Pin it to keep it open while you move between emails."/>
+        <bt:String id="runTip" DefaultValue="Extract to-dos from this email and write them straight into the Obsidian vault. Progress appears above the message."/>
+        </bt:LongStrings>
+      </Resources>
+    </VersionOverrides>
+  </VersionOverrides>
+</OfficeApp>

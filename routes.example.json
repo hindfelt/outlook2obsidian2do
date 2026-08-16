@@ -1,0 +1,44 @@
+{
+  "$comment": "Copy to routes.json and edit. Destinations the Router agent may pick. 'file' is relative to OBSIDIAN_VAULT_PATH. 'section' is the H2 heading tasks get appended under (created if missing). The Router only ever sees these ids and descriptions. 'owner_context' is one line about whose mailbox this is - it goes into the Extractor and Router system prompts so they judge relevance the way you would.",
+  "owner_context": "a busy professional juggling several client accounts, a new-business pipeline and internal admin",
+  "owner_name": "Riley",
+  "fallback_route_id": "unsorted",
+  "routes": [
+    {
+      "id": "acme",
+      "file": "00 Inbox/TODO.md",
+      "section": "Acme",
+      "description": "Acme Corp account: platform rollout, org design, integration workstreams, people topics (Alex, Jordan, Sam)."
+    },
+    {
+      "id": "northwind",
+      "file": "20 Clients/Northwind/TODO/Todo.md",
+      "section": "Inbox",
+      "description": "Northwind engagement and its carve-out from the parent group: transition services, day-one checklist, vendor sourcing, branding, advisor workstreams (Robin, Casey)."
+    },
+    {
+      "id": "pipeline",
+      "file": "00 Inbox/TODO.md",
+      "section": "Pipeline",
+      "description": "New business and deal flow: outreach, intros, NDAs, first screens, market scans."
+    },
+    {
+      "id": "admin",
+      "file": "00 Inbox/TODO.md",
+      "section": "Admin",
+      "description": "Internal admin: expenses, time reporting, scheduling, travel, IT, HR, compliance, recurring reporting."
+    },
+    {
+      "id": "personal",
+      "file": "00 Inbox/TODO.md",
+      "section": "Personal",
+      "description": "Non-work items: home, family, home server, private purchases."
+    },
+    {
+      "id": "unsorted",
+      "file": "00 Inbox/TODO.md",
+      "section": "Unsorted",
+      "description": "Fallback when no other route clearly fits. Prefer this over guessing."
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Obsidian To-Do</title>
+    <link rel="stylesheet" href="taskpane.css?v=6" />
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  </head>
+  <body>
+    <main id="app">
+      <header>
+        <h1>Obsidian To-Do</h1>
+        <p id="subject" class="muted">Loading message…</p>
+      </header>
+
+      <section class="controls">
+        <label class="check">
+          <input type="checkbox" id="dryRun" />
+          Preview only (don't write to the vault)
+        </label>
+        <button id="run" type="button" disabled>Extract to-dos</button>
+      </section>
+
+      <section id="status" class="status" hidden></section>
+      <section id="results" hidden></section>
+
+      <!-- Every job the backend knows about, newest first, refreshed while
+           anything is queued or running. Lets you fire off several emails
+           and watch them all from a pinned pane. -->
+      <section id="jobs" hidden>
+        <h2>Jobs</h2>
+        <div id="jobList"></div>
+      </section>
+
+      <details id="settings">
+        <summary>Settings</summary>
+
+        <div class="field">
+          <span class="label">Where the models run</span>
+          <label class="radio">
+            <input type="radio" name="provider" value="ollama" />
+            <span><strong>Local (Ollama)</strong><br />
+              <span class="muted small">Nothing leaves this Mac. Slower — minutes per email.</span></span>
+          </label>
+          <label class="radio">
+            <input type="radio" name="provider" value="anthropic" />
+            <span><strong>Claude API</strong><br />
+              <span class="muted small">Seconds per email. Email content is sent to Anthropic.</span></span>
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="label" for="extractorModel">Extractor — finds the tasks (hardest job)</label>
+          <select id="extractorModel"></select>
+
+          <label class="label" for="routerModel">Router — picks the destination note</label>
+          <select id="routerModel"></select>
+
+          <label class="label" for="writerModel">Writer — formats the checklist line</label>
+          <select id="writerModel"></select>
+        </div>
+
+        <div class="field" id="keyField">
+          <label class="label" for="apiKey">Anthropic API key</label>
+          <input type="password" id="apiKey" autocomplete="off" spellcheck="false"
+                 placeholder="sk-ant-…" />
+          <p class="muted small" id="keyState"></p>
+        </div>
+
+        <div class="row">
+          <button id="saveSettings" type="button">Save</button>
+          <button id="testSettings" type="button" class="secondary">Test connection</button>
+        </div>
+        <p id="settingsStatus" class="small"></p>
+      </details>
+
+      <footer class="muted small">
+        <span id="backend"></span> · <span id="health">checking…</span>
+      </footer>
+    </main>
+
+    <script src="taskpane.js?v=6"></script>
+  </body>
+</html>

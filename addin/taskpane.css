@@ -1,0 +1,203 @@
+:root {
+  color-scheme: light dark;
+  --fg: #1b1b1b;
+  --muted: #6b6b6b;
+  --bg: #ffffff;
+  --card: #f5f5f4;
+  --accent: #6b4423;
+  --border: #e0dedb;
+  --ok: #1f7a4d;
+  --err: #a33127;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #e9e7e4;
+    --muted: #9c9891;
+    --bg: #1c1b1a;
+    --card: #262523;
+    --accent: #c58a5a;
+    --border: #3a3835;
+    --ok: #5cc48d;
+    --err: #e08175;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 12px 14px 18px;
+  font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+h1 { font-size: 15px; margin: 0 0 2px; letter-spacing: -0.01em; }
+h2 { font-size: 13px; margin: 14px 0 6px; }
+
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+
+#subject {
+  margin: 0 0 12px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.check { font-size: 12px; display: flex; align-items: center; gap: 6px; }
+
+button {
+  appearance: none;
+  border: 0;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.5; cursor: default; }
+
+.status {
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.status.error { color: var(--err); border-color: var(--err); }
+.status.ok { color: var(--ok); }
+
+.task {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  background: var(--card);
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+.task .md {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.task .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* --- jobs list --- */
+
+#jobs { margin-top: 4px; }
+#jobs h2 { display: flex; align-items: baseline; gap: 8px; }
+#jobs h2 .count { font-weight: 400; color: var(--muted); font-size: 12px; }
+
+.job {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+.job.current { border-color: var(--accent); background: var(--card); }
+.job .head { display: flex; gap: 8px; align-items: baseline; }
+.job .badge {
+  flex: none;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.job .badge.running { color: var(--accent); border-color: var(--accent); }
+.job .badge.done { color: var(--ok); border-color: var(--ok); }
+.job .badge.error { color: var(--err); border-color: var(--err); }
+.job .subject {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.job .when { flex: none; color: var(--muted); font-size: 11px; }
+.job .detail { color: var(--muted); margin-top: 2px; overflow-wrap: anywhere; }
+.job .detail.error { color: var(--err); }
+.job details { margin-top: 4px; }
+.job details summary { cursor: pointer; color: var(--muted); font-size: 11px; }
+.job .line {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  padding: 3px 0 0 4px;
+  border-left: 2px solid var(--border);
+  margin-top: 4px;
+}
+
+footer { margin-top: 18px; border-top: 1px solid var(--border); padding-top: 8px; }
+
+/* --- settings --- */
+
+details#settings {
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+details#settings summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.field { margin-bottom: 14px; }
+.field .label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 8px 0 4px;
+}
+
+.radio {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.radio input { margin-top: 3px; }
+.radio:has(input:checked) { border-color: var(--accent); background: var(--card); }
+
+select,
+input[type="password"] {
+  width: 100%;
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.row { display: flex; gap: 8px; }
+button.secondary { background: transparent; color: var(--fg); border: 1px solid var(--border); }
+
+#settingsStatus { margin: 8px 0 0; overflow-wrap: anywhere; }
+#keyState { margin: 5px 0 0; overflow-wrap: anywhere; }
